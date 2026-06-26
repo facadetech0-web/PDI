@@ -1,0 +1,16 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Trigger every 6 days at midnight to prevent Supabase project pausing
+    - cron: '0 0 */6 * *'
+  workflow_dispatch: # Allow manual triggers
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping App Health API
+        run: |
+          curl -f -I -X GET "https://precar-inspect.vercel.app/api/health" || echo "App ping finished."
