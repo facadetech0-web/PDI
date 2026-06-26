@@ -74,7 +74,7 @@ CREATE TABLE public.inspector_profiles (
 -- VEHICLES
 -- ============================================================
 CREATE TABLE public.vehicles (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   owner_id        UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   make            TEXT NOT NULL,
   model           TEXT NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE public.vehicles (
 -- PRICING PLANS
 -- ============================================================
 CREATE TABLE public.pricing_plans (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name            TEXT NOT NULL,
   slug            TEXT NOT NULL UNIQUE,
   description     TEXT,
@@ -116,7 +116,7 @@ CREATE TABLE public.pricing_plans (
 -- BOOKINGS
 -- ============================================================
 CREATE TABLE public.bookings (
-  id                UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   booking_number    TEXT NOT NULL UNIQUE,
   customer_id       UUID NOT NULL REFERENCES public.profiles(id),
   vehicle_id        UUID NOT NULL REFERENCES public.vehicles(id),
@@ -150,7 +150,7 @@ CREATE TABLE public.bookings (
 -- INSPECTION TEMPLATES
 -- ============================================================
 CREATE TABLE public.inspection_templates (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name            TEXT NOT NULL,
   description     TEXT,
   version         INTEGER DEFAULT 1,
@@ -166,7 +166,7 @@ CREATE TABLE public.inspection_templates (
 -- INSPECTIONS
 -- ============================================================
 CREATE TABLE public.inspections (
-  id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   booking_id          UUID NOT NULL REFERENCES public.bookings(id) ON DELETE CASCADE,
   inspector_id        UUID NOT NULL REFERENCES public.profiles(id),
   template_id         UUID REFERENCES public.inspection_templates(id),
@@ -197,7 +197,7 @@ CREATE TABLE public.inspections (
 -- INSPECTION MEDIA
 -- ============================================================
 CREATE TABLE public.inspection_media (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   inspection_id   UUID NOT NULL REFERENCES public.inspections(id) ON DELETE CASCADE,
   category        TEXT NOT NULL,
   item            TEXT,
@@ -214,7 +214,7 @@ CREATE TABLE public.inspection_media (
 -- REPORTS
 -- ============================================================
 CREATE TABLE public.reports (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   inspection_id   UUID NOT NULL REFERENCES public.inspections(id) ON DELETE CASCADE,
   booking_id      UUID NOT NULL REFERENCES public.bookings(id),
   report_number   TEXT NOT NULL UNIQUE,
@@ -234,7 +234,7 @@ CREATE TABLE public.reports (
 -- INVOICES
 -- ============================================================
 CREATE TABLE public.invoices (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   invoice_number  TEXT NOT NULL UNIQUE,
   booking_id      UUID NOT NULL REFERENCES public.bookings(id),
   customer_id     UUID NOT NULL REFERENCES public.profiles(id),
@@ -259,7 +259,7 @@ CREATE TABLE public.invoices (
 -- COUPONS
 -- ============================================================
 CREATE TABLE public.coupons (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   code            TEXT NOT NULL UNIQUE,
   description     TEXT,
   coupon_type     coupon_type NOT NULL,
@@ -282,7 +282,7 @@ CREATE TABLE public.coupons (
 -- REFERRALS
 -- ============================================================
 CREATE TABLE public.referrals (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   referrer_id     UUID NOT NULL REFERENCES public.profiles(id),
   referral_code   TEXT NOT NULL UNIQUE,
   reward_amount   NUMERIC(10,2) DEFAULT 0,
@@ -293,7 +293,7 @@ CREATE TABLE public.referrals (
 );
 
 CREATE TABLE public.referral_uses (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   referral_id     UUID NOT NULL REFERENCES public.referrals(id),
   referred_id     UUID NOT NULL REFERENCES public.profiles(id),
   booking_id      UUID REFERENCES public.bookings(id),
@@ -306,7 +306,7 @@ CREATE TABLE public.referral_uses (
 -- REVIEWS
 -- ============================================================
 CREATE TABLE public.reviews (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   booking_id      UUID NOT NULL REFERENCES public.bookings(id),
   customer_id     UUID NOT NULL REFERENCES public.profiles(id),
   inspector_id    UUID NOT NULL REFERENCES public.profiles(id),
@@ -324,7 +324,7 @@ CREATE TABLE public.reviews (
 -- NOTIFICATIONS
 -- ============================================================
 CREATE TABLE public.notifications (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   type            notification_type NOT NULL,
   title           TEXT NOT NULL,
@@ -339,7 +339,7 @@ CREATE TABLE public.notifications (
 -- BLOG POSTS
 -- ============================================================
 CREATE TABLE public.blog_posts (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title           TEXT NOT NULL,
   slug            TEXT NOT NULL UNIQUE,
   excerpt         TEXT,
@@ -360,7 +360,7 @@ CREATE TABLE public.blog_posts (
 -- AUDIT LOGS
 -- ============================================================
 CREATE TABLE public.audit_logs (
-  id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID REFERENCES public.profiles(id),
   action          TEXT NOT NULL,
   entity_type     TEXT NOT NULL,
