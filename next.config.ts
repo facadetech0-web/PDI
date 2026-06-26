@@ -10,6 +10,10 @@ const withSerwist = withSerwistInit({
 const nextConfig: NextConfig = {
   /* config options here */
   turbopack: {},
+  eslint: {
+    // Lint errors should not block production builds; run lint separately in CI.
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default withSerwist(nextConfig);
