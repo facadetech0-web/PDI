@@ -91,7 +91,7 @@ BEGIN
     INSERT INTO public.referrals (referrer_id, referral_code)
     VALUES (
       NEW.id,
-      'REF-' || UPPER(SUBSTRING(encode(gen_random_bytes(4), 'hex') FROM 1 FOR 8))
+      'REF-' || UPPER(SUBSTRING(replace(gen_random_uuid()::text, '-', '') FROM 1 FOR 8))
     );
   END IF;
   RETURN NEW;

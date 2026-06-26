@@ -218,7 +218,7 @@ CREATE TABLE public.reports (
   inspection_id   UUID NOT NULL REFERENCES public.inspections(id) ON DELETE CASCADE,
   booking_id      UUID NOT NULL REFERENCES public.bookings(id),
   report_number   TEXT NOT NULL UNIQUE,
-  share_token     TEXT UNIQUE DEFAULT encode(gen_random_bytes(16), 'hex'),
+  share_token     TEXT UNIQUE DEFAULT replace(gen_random_uuid()::text, '-', ''),
   pdf_url         TEXT,
   overall_score   NUMERIC(5,2),
   summary         TEXT,
