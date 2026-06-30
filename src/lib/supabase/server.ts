@@ -1,9 +1,20 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
-// Fallback to placeholder during build — real values are injected at runtime.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key';
+const PLACEHOLDER_URL = 'https://placeholder.supabase.co';
+const PLACEHOLDER_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder';
+
+function getUrl(): string {
+  const v = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (v && v.startsWith('http')) return v;
+  return PLACEHOLDER_URL;
+}
+
+function getKey(): string {
+  const v = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (v && v.length > 10) return v;
+  return PLACEHOLDER_KEY;
+}
 
 /**
  * Create a Supabase client for use in Server Components, Server Actions,
@@ -13,8 +24,8 @@ export async function createClient() {
   const cookieStore = await cookies();
 
   return createServerClient(
-    supabaseUrl,
-    supabaseAnonKey,
+    getUrl(),
+    getKey(),
     {
       cookies: {
         getAll() {
@@ -34,4 +45,3 @@ export async function createClient() {
     }
   );
 }
-

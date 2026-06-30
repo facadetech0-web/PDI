@@ -1,8 +1,19 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
-// Fallback to placeholder during build — real values are injected at runtime.
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-role-key';
+const PLACEHOLDER_URL = 'https://placeholder.supabase.co';
+const PLACEHOLDER_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder';
+
+function getUrl(): string {
+  const v = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (v && v.startsWith('http')) return v;
+  return PLACEHOLDER_URL;
+}
+
+function getServiceKey(): string {
+  const v = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (v && v.length > 10) return v;
+  return PLACEHOLDER_KEY;
+}
 
 /**
  * Admin Supabase client using the service role key.
@@ -15,8 +26,8 @@ const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-ser
  */
 export function createAdminClient() {
   return createSupabaseClient(
-    supabaseUrl,
-    serviceRoleKey,
+    getUrl(),
+    getServiceKey(),
     {
       auth: {
         autoRefreshToken: false,
